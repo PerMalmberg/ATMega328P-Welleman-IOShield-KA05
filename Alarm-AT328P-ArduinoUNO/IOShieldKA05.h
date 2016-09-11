@@ -27,6 +27,11 @@ public:
 	// Input is 0...5
 	bool ReadInput( uint8_t input );
 	
+	uint16_t ReadAD( uint8_t channel );
+	
+	void EnableAD();
+	void DisableAD();
+	
 protected:
 private:
 	IOShieldKA05( const IOShieldKA05 &c ) = delete;
@@ -37,6 +42,7 @@ private:
 	void SetBit( volatile uint8_t* port, uint8_t bit );
 	void ClearBit( volatile uint8_t* port, uint8_t bit );
 	bool IsValidOutput( uint8_t output) const;
+	bool IsValidADChannel( uint8_t channel ) const;
 	void Synchronize() const;
 
 }; //IOShieldKA05
