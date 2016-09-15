@@ -6,9 +6,9 @@
 */
 
 #pragma once
+#include <stddef.h>
 
-// In C++ Compiler -> misc -> other flags: -DF_CPU=16000000 -DBAUD=9600
-
+// In C++ Compiler -> misc -> other flags: -DF_CPU=16000000 -DBAUD=115200
 #include <util/setbaud.h>
 #include <avr/io.h>
 
@@ -19,7 +19,10 @@ public:
 	RS232();
 	~RS232();
 	
+	void Enable();
+		
 	void Write( uint8_t b );
+	void Write( uint8_t* data, size_t length );
 	uint8_t Read();
 	
 protected:

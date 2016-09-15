@@ -32,6 +32,10 @@ public:
 	void EnableAD();
 	void DisableAD();
 	
+	uint8_t GetAnalogInputCount() { return 6; }
+	uint8_t GetDigitalInputCount() { return 6; }
+	uint8_t GetDigitalOutputCount() { return 6; }
+	
 protected:
 private:
 	IOShieldKA05( const IOShieldKA05 &c ) = delete;
