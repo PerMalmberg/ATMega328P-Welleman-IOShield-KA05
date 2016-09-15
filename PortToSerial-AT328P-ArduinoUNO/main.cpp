@@ -33,11 +33,11 @@ int main(void)
 		}
 		
 		for( int i = 0; i < shield.GetAnalogInputCount(); ++i) {
-			uint8_t value = shield.ReadAD( i );
+			uint16_t value = shield.ReadAD( i );
 			sprintf( buff, "{\"AI%d\":\"%d\"}\n", i, value );
 			serial.Write( reinterpret_cast<uint8_t*>( &buff[0] ), strlen(buff) );
 		}
-				
+		_delay_ms(300);
 	}
 }
 
