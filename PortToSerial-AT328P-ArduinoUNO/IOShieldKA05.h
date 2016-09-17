@@ -32,9 +32,9 @@ public:
 	void EnableAD();
 	void DisableAD();
 	
-	uint8_t GetAnalogInputCount() { return 6; }
-	uint8_t GetDigitalInputCount() { return 6; }
-	uint8_t GetDigitalOutputCount() { return 6; }
+	uint8_t GetAnalogInputCount() const { return 6; }
+	uint8_t GetDigitalInputCount() const { return 6; }
+	uint8_t GetDigitalOutputCount() const { return 6; }
 	
 protected:
 private:

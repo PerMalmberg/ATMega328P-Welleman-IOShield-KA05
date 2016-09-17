@@ -24,20 +24,40 @@ int main(void)
 	serial.Enable();
 		
 	char buff[20];
-		
-	while(true) {
+	bool digital[shield.GetDigitalInputCount()];
+	uint16_t analog[shield.GetDigitalInputCount()];
+	bool sendFullUpdate = true;
+	uint16_t count = 0;
+	
+	while(true) {		
 		for( int i = 0; i < shield.GetDigitalInputCount(); ++i) {
 			bool state = shield.ReadInput( i );
-			sprintf( buff, "{\"DI%d\":\"%d\"}\n", i, state ? 1 : 0 );
-			serial.Write( reinterpret_cast<uint8_t*>( &buff[0] ), strlen(buff) );
+			if( sendFullUpdate || state != digital[i] ) {
+				sprintf( buff, "{\"DI%d\":\"%d\"}\r\n", i, state ? 1 : 0 );
+				serial.Write( reinterpret_cast<uint8_t*>( &buff[0] ), strlen(buff) );
+			}
+			digital[i] = state;
 		}
 		
 		for( int i = 0; i < shield.GetAnalogInputCount(); ++i) {
-			uint16_t value = shield.ReadAD( i );
-			sprintf( buff, "{\"AI%d\":\"%d\"}\n", i, value );
-			serial.Write( reinterpret_cast<uint8_t*>( &buff[0] ), strlen(buff) );
+			volatile uint16_t value = shield.ReadAD( i );
+			if( sendFullUpdate || value != analog[i] ) {			
+				sprintf( buff, "{\"AI%d\":\"%d\"}\r\n", i, value );
+				serial.Write( reinterpret_cast<uint8_t*>( &buff[0] ), strlen(buff) );
+			}
+			analog[i] = value;				
 		}
-		_delay_ms(300);
+		              
+		if( ++count > 10000 ) {
+			count = 0;
+			sendFullUpdate = true;
+			// In case the communication has gone out-of-synch, stop sending for
+			// a short while before each update so that the TX line is held high.
+			_delay_ms(500);		
+		}
+		else {
+			sendFullUpdate = false;	
+		}	
 	}
 }
 
