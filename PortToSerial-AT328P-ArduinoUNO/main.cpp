@@ -11,6 +11,7 @@
 #include <util/delay.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "IOShieldKA05.h"
 
 
@@ -41,7 +42,7 @@ int main(void)
 		
 		for( int i = 0; i < shield.GetAnalogInputCount(); ++i) {
 			volatile uint16_t value = shield.ReadAD( i );
-			if( sendFullUpdate || value != analog[i] ) {			
+			if( sendFullUpdate || abs( value - analog[i] ) > 3 ) {			
 				sprintf( buff, "{\"AI%d\":\"%d\"}\r\n", i, value );
 				serial.Write( reinterpret_cast<uint8_t*>( &buff[0] ), strlen(buff) );
 			}
